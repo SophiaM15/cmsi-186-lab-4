@@ -13,19 +13,11 @@ public class RobotSoccerSimulation extends JPanel {
     private static final double WIDTH = 400;
     private static final double HEIGHT = 600;
 
-    private double PLAYER_RADIUS = 15;
-    private double ENEMY_RADIUS = 20;
-    private double PLAYER_SPEED = 1.3;
-    private double ENEMY_SPEED = 1.8;
+    private static double PLAYER_RADIUS = 15;
+    private static double ENEMY_RADIUS = 20;
+    private static double PLAYER_SPEED = 1.3;
+    private static double ENEMY_SPEED = 1.8;
     private static double FRICTION = 0.0009;
-
-    RobotSoccerSimulation(double PLAYER_RADIUS, double ENEMY_RADIUS, double PLAYER_SPEED, double ENEMY_SPEED, double FRICTION) {
-        this.PLAYER_RADIUS = PLAYER_RADIUS;
-        this.ENEMY_RADIUS = ENEMY_RADIUS;
-        this.PLAYER_SPEED = PLAYER_SPEED;
-        this.ENEMY_SPEED = ENEMY_SPEED;
-        RobotSoccerSimulation.FRICTION = FRICTION;
-    }
 
     private volatile String endMessage;
 
@@ -71,8 +63,6 @@ public class RobotSoccerSimulation extends JPanel {
     }
 
     private static Ball[] balls; 
-
-    private static RobotSoccerSimulation[] game;
 
     private static class Goal {
         double x = WIDTH / 2;
@@ -147,21 +137,15 @@ public class RobotSoccerSimulation extends JPanel {
     public static void main(String[] args) {
 
        try {
-            if (args.length != 5) {
-                throw new IllegalArgumentException("Exactly five arguments required");
-            }
-            double PLAYER_RADIUS = Double.parseDouble(args[0]);
-            double ENEMY_RADIUS = Double.parseDouble(args[1]);
-            double PLAYER_SPEED = Double.parseDouble(args[2]);
-            double ENEMY_SPEED = Double.parseDouble(args[3]);
-            double FRICTION = Double.parseDouble(args[4]); 
-            System.out.println(game(PLAYER_RADIUS, ENEMY_RADIUS, PLAYER_SPEED, ENEMY_SPEED, FRICTION));
-            } catch (NumberFormatException e) {
-                System.err.println("Arguments must all be integers");
-            } catch (IllegalArgumentException e) {
-                System.err.println(e.getMessage());
-            }
-         }
+        PLAYER_RADIUS = Double.parseDouble(args[0]);
+        ENEMY_RADIUS = Double.parseDouble(args[1]);
+        PLAYER_SPEED = Double.parseDouble(args[2]);
+        ENEMY_SPEED = Double.parseDouble(args[3]);
+        FRICTION = Double.parseDouble(args[4]); 
+        } catch (NumberFormatException e) {
+            System.err.println("Only numbers can be used, please try again.");
+            return;
+        } 
 
         SwingUtilities.invokeLater(() -> {
              balls = new Ball[] { 
@@ -171,11 +155,7 @@ public class RobotSoccerSimulation extends JPanel {
                 new Ball(WIDTH / 2, HEIGHT / 2, ENEMY_RADIUS, ENEMY_SPEED, Color.RED) 
             };
 
-             game = new RobotSoccerSimulation[] {
-                 new game(PLAYER_RADIUS, ENEMY_RADIUS, PLAYER_SPEED, ENEMY_SPEED, FRICTION)
-             };
-
-            var panel = new RobotSoccerSimulation(PLAYER_RADIUS, ENEMY_RADIUS, PLAYER_SPEED, ENEMY_SPEED, FRICTION);
+            var panel = new RobotSoccerSimulation();
             panel.setBackground(Color.GREEN.brighter());
             var frame = new JFrame("Robotic Soccer");
             frame.setSize((int) WIDTH, (int) HEIGHT);
@@ -185,3 +165,4 @@ public class RobotSoccerSimulation extends JPanel {
             new Thread(() -> panel.runTheAnimation()).start();
         });
     }
+}
