@@ -142,10 +142,23 @@ public class RobotSoccerSimulation extends JPanel {
         PLAYER_SPEED = Double.parseDouble(args[2]);
         ENEMY_SPEED = Double.parseDouble(args[3]);
         FRICTION = Double.parseDouble(args[4]); 
+
+        if (FRICTION < 0.0009) {
+            throw new IllegalArgumentException("Sorry, the friction amount is out of range");
+        } else if (PLAYER_RADIUS > 50 || PLAYER_RADIUS < 5 
+                        || ENEMY_RADIUS > 50 || ENEMY_RADIUS < 5) {
+            throw new IllegalArgumentException("Sorry, the size you used is out of range");
+        } else if (PLAYER_SPEED > 100 || ENEMY_SPEED > 100) {
+            throw new IllegalArgumentException("Ball speed cannot be greater than 100.");
+        }
+
         } catch (NumberFormatException e) {
             System.err.println("Only numbers can be used, please try again.");
             return;
-        } 
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
 
         SwingUtilities.invokeLater(() -> {
              balls = new Ball[] { 
